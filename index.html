@@ -2,35 +2,35 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Mon Flipbook Responsive</title>
-
-<!-- Exemple Adobe Font -->
-<link rel="stylesheet" href="https://use.typekit.net/xxxxxxx.css">
-
+<title>Bioplastics</title>
+  <!-- typo -->
+<link rel="stylesheet" href="https://use.typekit.net/wkd6ztd.css">
+  
 <style>
 body {
   margin: 0;
   background: #222;
-  font-family: "adobe-garamond-pro", serif;
+  font-family: sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 50px 20px;
   color: #fff;
 }
 
 h1 {
-  text-align: center;
+  font-family: "vollkorn", serif;
   font-size: 48px;
+  letter-spacing: 1px;
   margin-bottom: 30px;
+  color: #fff;
 }
 
 #book-wrapper {
-  width: 100%;
-  max-width: 1190px;
-  height: auto;
-  overflow: visible;
   position: relative;
+  width: 1190px;
+  height: 842px;
+  overflow: visible;
   margin-bottom: 30px;
 }
 
@@ -40,14 +40,9 @@ h1 {
   width: 100%;
 }
 
-.spread {
-  display: flex;
-  width: 100%;
-}
-
 .page {
-  width: 50%;
-  height: auto;
+  width: 595px;
+  height: 842px;
   background: white;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   overflow: hidden;
@@ -57,13 +52,9 @@ h1 {
   box-shadow: inset -20px 0 50px rgba(0,0,0,0.3);
 }
 
-.page.right {
-  box-shadow: inset 20px 0 50px rgba(0,0,0,0.3);
-}
-
 .page img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -82,12 +73,11 @@ button {
 #prev { left: -80px; }
 #next { right: -80px; }
 
-/* Liens PDF */
+/* Liens de téléchargement */
 .download-links {
   margin-top: 20px;
   display: flex;
   gap: 20px;
-  justify-content: center;
 }
 
 .download-links a {
@@ -97,30 +87,17 @@ button {
   padding: 10px 20px;
   font-weight: bold;
   border-radius: 5px;
+  transition: background 0.3s;
 }
 
 .download-links a:hover {
   background: #ccc;
 }
-
-/* Mobile / responsive */
-@media (max-width: 768px) {
-  .page {
-    width: 100%; /* 1 page à la fois */
-  }
-
-  #prev, #next {
-    font-size: 30px;
-    padding: 8px 16px;
-    left: 10px;
-    right: 10px;
-  }
-}
 </style>
 </head>
 <body>
 
-<h1>Mon Super Flipbook</h1>
+<h1>Bioplastics</h1>
 
 <div id="book-wrapper">
   <button id="prev">‹</button>
@@ -131,43 +108,43 @@ button {
   </div>
 </div>
 
+<!-- Liens PDF -->
 <div class="download-links">
-  <a href="./pdf/book-vf.pdf" download>Télécharger PDF VF</a>
-  <a href="./pdf/book-en.pdf" download>Télécharger PDF EN</a>
+  <a href="./pdf/book-vf.pdf" download>Télécharger VF</a>
+  <a href="./pdf/book-en.pdf" download>Download English</a>
 </div>
 
 <script>
 // Configuration
+const totalPages = 26;
 const book = document.getElementById('book');
 let currentSpread = 0;
 
-// Générer les pages
+// Générer automatiquement les pages et spreads
 function generatePages() {
-  // Couverture avant
   const coverStart = document.createElement('div');
   coverStart.className = 'page';
   coverStart.innerHTML = `<img src="./pages/page1.jpg">`;
   book.appendChild(coverStart);
 
-  // Pages intérieures 2 par 2
   for(let i=2; i<=25; i+=2){
     const left = document.createElement('div');
     left.className = 'page left';
     left.innerHTML = `<img src="./pages/page${i}.jpg">`;
 
     const right = document.createElement('div');
-    right.className = 'page right';
+    right.className = 'page';
     right.innerHTML = `<img src="./pages/page${i+1}.jpg">`;
 
     const spread = document.createElement('div');
     spread.className = 'spread';
+    spread.style.display = 'flex';
     spread.appendChild(left);
     spread.appendChild(right);
 
     book.appendChild(spread);
   }
 
-  // Couverture arrière
   const coverEnd = document.createElement('div');
   coverEnd.className = 'page';
   coverEnd.innerHTML = `<img src="./pages/page26.jpg">`;
@@ -177,17 +154,8 @@ function generatePages() {
 // Mettre à jour la vue
 function updateBook() {
   const children = Array.from(book.children);
-  const isMobile = window.innerWidth <= 768;
-
   children.forEach((child, index) => {
     if(index === currentSpread) {
-      if(isMobile && child.children.length === 2) {
-        // Mobile : montrer seulement la page de gauche
-        child.children[0].style.display = 'block';
-        if(child.children[1]) child.children[1].style.display = 'none';
-      } else {
-        Array.from(child.children).forEach(c => c.style.display = 'block');
-      }
       child.style.display = 'flex';
     } else {
       child.style.display = 'none';
@@ -208,9 +176,6 @@ document.getElementById('prev').onclick = () => {
   if(currentSpread > 0) currentSpread--;
   updateBook();
 };
-
-// Adapter au redimensionnement
-window.addEventListener('resize', updateBook);
 </script>
 
 </body>
