@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Flipbook A4</title>
+<title>Flipbook A4 Simple</title>
 <style>
 body {
   margin: 0;
@@ -18,45 +18,31 @@ body {
   position: relative;
   width: 1190px; /* 2 pages A4 */
   height: 842px;
-  perspective: 2000px;
+  overflow: hidden;
 }
 
-#book {
-  width: 1190px;
-  height: 842px;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 1s;
+.page-container {
+  display: flex;
+  transition: transform 0.5s;
+  width: 100%;
 }
 
-/* Chaque page */
 .page {
   width: 595px;
   height: 842px;
   background: white;
-  position: absolute;
-  top: 0;
-  left: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
   overflow: hidden;
-  backface-visibility: hidden;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.page.left {
+  box-shadow: inset -20px 0 50px rgba(0,0,0,0.3); /* ombre côté gauche */
 }
 
 .page img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-/* Pages de droite */
-.page.right {
-  left: 595px;
-  transform-origin: left;
-}
-
-/* Pages de gauche */
-.page.left {
-  transform-origin: right;
 }
 
 /* Boutons */
@@ -82,83 +68,77 @@ button {
   <button id="prev">‹</button>
   <button id="next">›</button>
 
-  <div id="book">
-    <!-- Couverture avant -->
-    <div class="page right" data-page="1"><img src="./pages/page1.jpg"></div>
-
-    <!-- Pages intérieures -->
-    <div class="page left" data-page="2"><img src="./pages/page2.jpg"></div>
-    <div class="page right" data-page="3"><img src="./pages/page3.jpg"></div>
-
-    <div class="page left" data-page="4"><img src="./pages/page4.jpg"></div>
-    <div class="page right" data-page="5"><img src="./pages/page5.jpg"></div>
-
-    <div class="page left" data-page="6"><img src="./pages/page6.jpg"></div>
-    <div class="page right" data-page="7"><img src="./pages/page7.jpg"></div>
-
-    <div class="page left" data-page="8"><img src="./pages/page8.jpg"></div>
-    <div class="page right" data-page="9"><img src="./pages/page9.jpg"></div>
-
-    <div class="page left" data-page="10"><img src="./pages/page10.jpg"></div>
-    <div class="page right" data-page="11"><img src="./pages/page11.jpg"></div>
-
-    <div class="page left" data-page="12"><img src="./pages/page12.jpg"></div>
-    <div class="page right" data-page="13"><img src="./pages/page13.jpg"></div>
-
-    <div class="page left" data-page="14"><img src="./pages/page14.jpg"></div>
-    <div class="page right" data-page="15"><img src="./pages/page15.jpg"></div>
-
-    <div class="page left" data-page="16"><img src="./pages/page16.jpg"></div>
-    <div class="page right" data-page="17"><img src="./pages/page17.jpg"></div>
-
-    <div class="page left" data-page="18"><img src="./pages/page18.jpg"></div>
-    <div class="page right" data-page="19"><img src="./pages/page19.jpg"></div>
-
-    <div class="page left" data-page="20"><img src="./pages/page20.jpg"></div>
-    <div class="page right" data-page="21"><img src="./pages/page21.jpg"></div>
-
-    <div class="page left" data-page="22"><img src="./pages/page22.jpg"></div>
-    <div class="page right" data-page="23"><img src="./pages/page23.jpg"></div>
-
-    <div class="page left" data-page="24"><img src="./pages/page24.jpg"></div>
-    <div class="page right" data-page="25"><img src="./pages/page25.jpg"></div>
-
-    <!-- Couverture arrière -->
-    <div class="page left" data-page="26"><img src="./pages/page26.jpg"></div>
+  <div class="page-container" id="book">
+    <!-- Les pages seront générées par JS -->
   </div>
 </div>
 
 <script>
+// Configuration
+const totalPages = 26;
 const book = document.getElementById('book');
-const pages = Array.from(document.querySelectorAll('.page'));
-let currentPair = 0; // 0 = couverture avant, 1 = première paire intérieure
+let currentSpread = 0; // index du spread visible
 
+// Générer automatiquement les pages et spreads
+function generatePages() {
+  // Page 1 seule (couverture avant)
+  const coverStart = document.createElement('div');
+  coverStart.className = 'page';
+  coverStart.innerHTML = `<img src="./pages/page1.jpg">`;
+  book.appendChild(coverStart);
+
+  // Pages intérieures 2 par 2
+  for(let i=2; i<=25; i+=2){
+    const left = document.createElement('div');
+    left.className = 'page left';
+    left.innerHTML = `<img src="./pages/page${i}.jpg">`;
+
+    const right = document.createElement('div');
+    right.className = 'page';
+    right.innerHTML = `<img src="./pages/page${i+1}.jpg">`;
+
+    const spread = document.createElement('div');
+    spread.className = 'spread';
+    spread.style.display = 'flex';
+    spread.appendChild(left);
+    spread.appendChild(right);
+
+    book.appendChild(spread);
+  }
+
+  // Page 26 seule (couverture arrière)
+  const coverEnd = document.createElement('div');
+  coverEnd.className = 'page';
+  coverEnd.innerHTML = `<img src="./pages/page26.jpg">`;
+  book.appendChild(coverEnd);
+}
+
+// Mettre à jour la vue
 function updateBook() {
-  pages.forEach(p => {
-    const pageNum = parseInt(p.dataset.page);
-    if(pageNum === 1){ // Couverture avant
-      p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      p.style.zIndex = 100;
-    } else if(pageNum === 26){ // Couverture arrière
-      p.style.transform = currentPair >= 12 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      p.style.zIndex = 100;
-    } else { // Pages intérieures
-      const pairIndex = Math.floor((pageNum-2)/2) +1;
-      if(pairIndex <= currentPair) p.style.transform = 'rotateY(-180deg)';
-      else p.style.transform = 'rotateY(0deg)';
-      p.style.zIndex = 50 - pageNum;
+  const children = Array.from(book.children);
+  children.forEach((child, index) => {
+    if(index === currentSpread) {
+      child.style.display = 'flex';
+    } else {
+      child.style.display = 'none';
     }
   });
 }
 
-// Boutons
-document.getElementById('next').onclick = () => { if(currentPair<13) currentPair++; updateBook(); };
-document.getElementById('prev').onclick = () => { if(currentPair>0) currentPair--; updateBook(); };
-
 // Initialisation
+generatePages();
 updateBook();
+
+// Boutons
+document.getElementById('next').onclick = () => {
+  if(currentSpread < book.children.length - 1) currentSpread++;
+  updateBook();
+};
+document.getElementById('prev').onclick = () => {
+  if(currentSpread > 0) currentSpread--;
+  updateBook();
+};
 </script>
 
 </body>
-</html>
 </html>
