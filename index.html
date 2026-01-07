@@ -14,11 +14,12 @@ body {
   font-family: sans-serif;
 }
 
+/* Modifier le wrapper pour ne pas couper les boutons */
 #book-wrapper {
   position: relative;
-  width: 1190px; /* 2 pages A4 */
+  width: 1190px;
   height: 842px;
-  overflow: hidden;
+  overflow: visible; /* <- Important pour les boutons */
 }
 
 .page-container {
