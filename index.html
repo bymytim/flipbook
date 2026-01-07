@@ -7,8 +7,9 @@
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Turn.js -->
+<!-- Turn.js (HTML4 fallback) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.html4.min.js"></script>
 
 <style>
 body {
@@ -20,26 +21,22 @@ body {
   margin:0;
 }
 
-/* Conteneur général */
 #book-wrapper {
   position: relative;
 }
 
-/* Livre (2 pages A4) */
 #flipbook {
   width: 1190px;
   height: 842px;
 }
 
-/* Page A4 */
-.page {
+#flipbook .page {
   width: 595px;
   height: 842px;
   background: white;
 }
 
-/* Image pleine page */
-.page img {
+#flipbook .page img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -50,21 +47,16 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.9);
+  background: white;
   border: none;
   font-size: 40px;
   cursor: pointer;
   padding: 10px 18px;
-  z-index: 10;
+  z-index: 999; /* CRITIQUE */
 }
 
-#prev {
-  left: -70px;
-}
-
-#next {
-  right: -70px;
-}
+#prev { left: -80px; }
+#next { right: -80px; }
 </style>
 </head>
 
@@ -77,10 +69,7 @@ body {
 
   <div id="flipbook">
 
-    <!-- Couverture avant -->
     <div class="page"><img src="./pages/page1.jpg"></div>
-
-    <!-- Intérieur -->
     <div class="page"><img src="./pages/page2.jpg"></div>
     <div class="page"><img src="./pages/page3.jpg"></div>
     <div class="page"><img src="./pages/page4.jpg"></div>
@@ -105,38 +94,31 @@ body {
     <div class="page"><img src="./pages/page23.jpg"></div>
     <div class="page"><img src="./pages/page24.jpg"></div>
     <div class="page"><img src="./pages/page25.jpg"></div>
-
-    <!-- Couverture arrière -->
     <div class="page"><img src="./pages/page26.jpg"></div>
 
   </div>
 </div>
 
 <script>
-$(function(){
+$(document).ready(function(){
+
+  if (!$.isFunction($.fn.turn)) {
+    alert("Turn.js n’est pas chargé !");
+    return;
+  }
 
   $('#flipbook').turn({
     width: 1190,
     height: 842,
     autoCenter: true,
-    display: 'double',   // IMPORTANT
-    when: {
-      turning: function(event, page) {
-        // Couvertures seules
-        if (page === 1 || page === $('#flipbook').turn('pages')) {
-          $('#flipbook').turn('display', 'single');
-        } else {
-          $('#flipbook').turn('display', 'double');
-        }
-      }
-    }
+    display: 'double'
   });
 
-  $('#prev').click(function(){
+  $('#prev').on('click', function(){
     $('#flipbook').turn('previous');
   });
 
-  $('#next').click(function(){
+  $('#next').on('click', function(){
     $('#flipbook').turn('next');
   });
 
