@@ -19,18 +19,27 @@ body {
   width: 1190px; /* 2 pages A4 */
   height: 842px;
   perspective: 2000px;
-  overflow: hidden;
 }
 
+#book {
+  width: 1190px;
+  height: 842px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+/* Chaque page */
 .page {
-  position: absolute;
   width: 595px;
   height: 842px;
   background: white;
+  position: absolute;
+  top: 0;
+  left: 0;
   overflow: hidden;
+  backface-visibility: hidden;
   box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  transition: transform 0.8s;
-  transform-origin: left;
 }
 
 .page img {
@@ -39,98 +48,115 @@ body {
   object-fit: contain;
 }
 
-#prev-left, #next-left,
-#prev-right, #next-right {
+/* Pages de droite */
+.page.right {
+  left: 595px;
+  transform-origin: left;
+}
+
+/* Pages de gauche */
+.page.left {
+  transform-origin: right;
+}
+
+/* Boutons */
+button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255,255,255,0.9);
   border: none;
-  font-size: 35px;
+  font-size: 40px;
   cursor: pointer;
-  padding: 8px 15px;
-  z-index: 10;
+  padding: 10px 20px;
+  z-index: 1000;
 }
 
-#prev-left { left: -90px; }
-#next-left { left: 520px; }
-#prev-right { right: 520px; }
-#next-right { right: -90px; }
+#prev { left: -80px; }
+#next { right: -80px; }
 </style>
 </head>
 <body>
 
 <div id="book-wrapper">
+  <button id="prev">‹</button>
+  <button id="next">›</button>
 
-  <!-- Boutons gauche -->
-  <button id="prev-left">‹</button>
-  <button id="next-left">›</button>
+  <div id="book">
+    <!-- Couverture avant -->
+    <div class="page left" data-page="1"><img src="./pages/page1.jpg"></div>
 
-  <!-- Boutons droite -->
-  <button id="prev-right">‹</button>
-  <button id="next-right">›</button>
+    <!-- Pages intérieures -->
+    <div class="page left" data-page="2"><img src="./pages/page2.jpg"></div>
+    <div class="page right" data-page="3"><img src="./pages/page3.jpg"></div>
 
-  <!-- Pages -->
-  <div class="page" data-page="1" style="left:0"><img src="./pages/page1.jpg"></div>
+    <div class="page left" data-page="4"><img src="./pages/page4.jpg"></div>
+    <div class="page right" data-page="5"><img src="./pages/page5.jpg"></div>
 
-  <!-- Pages intérieures 2 par 2 -->
-  <div class="page" data-page="2" style="left:0"><img src="./pages/page2.jpg"></div>
-  <div class="page" data-page="3" style="left:595px"><img src="./pages/page3.jpg"></div>
+    <div class="page left" data-page="6"><img src="./pages/page6.jpg"></div>
+    <div class="page right" data-page="7"><img src="./pages/page7.jpg"></div>
 
-  <div class="page" data-page="4" style="left:0"><img src="./pages/page4.jpg"></div>
-  <div class="page" data-page="5" style="left:595px"><img src="./pages/page5.jpg"></div>
+    <div class="page left" data-page="8"><img src="./pages/page8.jpg"></div>
+    <div class="page right" data-page="9"><img src="./pages/page9.jpg"></div>
 
-  <div class="page" data-page="6" style="left:0"><img src="./pages/page6.jpg"></div>
-  <div class="page" data-page="7" style="left:595px"><img src="./pages/page7.jpg"></div>
+    <div class="page left" data-page="10"><img src="./pages/page10.jpg"></div>
+    <div class="page right" data-page="11"><img src="./pages/page11.jpg"></div>
 
-  <!-- ... Continue toutes les pages intérieures ... -->
+    <div class="page left" data-page="12"><img src="./pages/page12.jpg"></div>
+    <div class="page right" data-page="13"><img src="./pages/page13.jpg"></div>
 
-  <div class="page" data-page="24" style="left:0"><img src="./pages/page24.jpg"></div>
-  <div class="page" data-page="25" style="left:595px"><img src="./pages/page25.jpg"></div>
+    <div class="page left" data-page="14"><img src="./pages/page14.jpg"></div>
+    <div class="page right" data-page="15"><img src="./pages/page15.jpg"></div>
 
-  <!-- Couverture arrière -->
-  <div class="page" data-page="26" style="left:0"><img src="./pages/page26.jpg"></div>
+    <div class="page left" data-page="16"><img src="./pages/page16.jpg"></div>
+    <div class="page right" data-page="17"><img src="./pages/page17.jpg"></div>
 
+    <div class="page left" data-page="18"><img src="./pages/page18.jpg"></div>
+    <div class="page right" data-page="19"><img src="./pages/page19.jpg"></div>
+
+    <div class="page left" data-page="20"><img src="./pages/page20.jpg"></div>
+    <div class="page right" data-page="21"><img src="./pages/page21.jpg"></div>
+
+    <div class="page left" data-page="22"><img src="./pages/page22.jpg"></div>
+    <div class="page right" data-page="23"><img src="./pages/page23.jpg"></div>
+
+    <div class="page left" data-page="24"><img src="./pages/page24.jpg"></div>
+    <div class="page right" data-page="25"><img src="./pages/page25.jpg"></div>
+
+    <!-- Couverture arrière -->
+    <div class="page left" data-page="26"><img src="./pages/page26.jpg"></div>
+  </div>
 </div>
 
 <script>
+const book = document.getElementById('book');
 const pages = Array.from(document.querySelectorAll('.page'));
 let currentPair = 0; // 0 = couverture avant, 1 = première paire intérieure
 
-function updatePages() {
-  pages.forEach((p) => {
+function updateBook() {
+  pages.forEach(p => {
     const pageNum = parseInt(p.dataset.page);
-
-    // Couverture avant
-    if(pageNum === 1) {
+    if(pageNum === 1){ // Couverture avant
       p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
       p.style.zIndex = 100;
-    }
-    // Couverture arrière
-    else if(pageNum === 26) {
+    } else if(pageNum === 26){ // Couverture arrière
       p.style.transform = currentPair >= 12 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
       p.style.zIndex = 100;
-    }
-    // Pages intérieures
-    else {
-      const pairIndex = Math.floor((pageNum-2)/2); // chaque paire = 2 pages
-      if(pairIndex < currentPair) p.style.transform = 'rotateY(-180deg)';
+    } else { // Pages intérieures
+      const pairIndex = Math.floor((pageNum-2)/2) +1;
+      if(pairIndex <= currentPair) p.style.transform = 'rotateY(-180deg)';
       else p.style.transform = 'rotateY(0deg)';
-      p.style.zIndex = 100 - pageNum;
+      p.style.zIndex = 50 - pageNum;
     }
   });
 }
 
-// Boutons gauche
-document.getElementById('next-left').onclick = () => { if(currentPair < 12) currentPair++; updatePages(); };
-document.getElementById('prev-left').onclick = () => { if(currentPair > 0) currentPair--; updatePages(); };
-
-// Boutons droite
-document.getElementById('next-right').onclick = () => { if(currentPair < 12) currentPair++; updatePages(); };
-document.getElementById('prev-right').onclick = () => { if(currentPair > 0) currentPair--; updatePages(); };
+// Boutons
+document.getElementById('next').onclick = () => { if(currentPair<13) currentPair++; updateBook(); };
+document.getElementById('prev').onclick = () => { if(currentPair>0) currentPair--; updateBook(); };
 
 // Initialisation
-updatePages();
+updateBook();
 </script>
 
 </body>
