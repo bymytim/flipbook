@@ -50,10 +50,10 @@ body {
 
 /* Couvertures avant/arrière */
 .page.cover {
-  left: 0;
-  width: 595px; /* largeur d’une page */
-  z-index: 200; /* toujours au-dessus au départ */
-  transform-origin: left;
+  left: 0;              /* à gauche du livre */
+  width: 595px;          /* largeur d’une page */
+  z-index: 1000;         /* au-dessus des pages intérieures */
+  transform-origin: left; 
   box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
@@ -147,10 +147,10 @@ function updateBook() {
     const pageNum = parseInt(p.dataset.page);
     if(pageNum === 1){ // Couverture avant
       p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      p.style.zIndex = 200;
+      p.style.zIndex = 1000;
     } else if(pageNum === 26){ // Couverture arrière
       p.style.transform = currentPair >= 12 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      p.style.zIndex = 200;
+      p.style.zIndex = 1000;
     } else { // Pages intérieures
       const pairIndex = Math.floor((pageNum-2)/2) +1;
       if(pairIndex <= currentPair) p.style.transform = 'rotateY(-180deg)';
