@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Mon Flipbook</title>
+<title>Flipbook A4</title>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -12,77 +12,134 @@
 
 <style>
 body {
-  background: #222;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+  background:#222;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
 }
 
-/* Taille totale du livre (2 pages A4) */
+/* Conteneur général */
+#book-wrapper {
+  position: relative;
+}
+
+/* Livre (2 pages A4) */
 #flipbook {
   width: 1190px;
   height: 842px;
 }
 
-/* Une page A4 */
-#flipbook .page {
+/* Page A4 */
+.page {
   width: 595px;
   height: 842px;
+  background: white;
 }
 
-/* Image plein format */
-#flipbook .page img {
+/* Image pleine page */
+.page img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: white;
+}
+
+/* Boutons */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.9);
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  padding: 10px 18px;
+  z-index: 10;
+}
+
+#prev {
+  left: -70px;
+}
+
+#next {
+  right: -70px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="flipbook">
+<div id="book-wrapper">
 
-  <div class="page"><img src="./pages/page1.jpg"></div>
-  <div class="page"><img src="./pages/page2.jpg"></div>
-  <div class="page"><img src="./pages/page3.jpg"></div>
-  <div class="page"><img src="./pages/page4.jpg"></div>
-  <div class="page"><img src="./pages/page5.jpg"></div>
-  <div class="page"><img src="./pages/page6.jpg"></div>
-  <div class="page"><img src="./pages/page7.jpg"></div>
-  <div class="page"><img src="./pages/page8.jpg"></div>
-  <div class="page"><img src="./pages/page9.jpg"></div>
-  <div class="page"><img src="./pages/page10.jpg"></div>
-  <div class="page"><img src="./pages/page11.jpg"></div>
-  <div class="page"><img src="./pages/page12.jpg"></div>
-  <div class="page"><img src="./pages/page13.jpg"></div>
-  <div class="page"><img src="./pages/page14.jpg"></div>
-  <div class="page"><img src="./pages/page15.jpg"></div>
-  <div class="page"><img src="./pages/page16.jpg"></div>
-  <div class="page"><img src="./pages/page17.jpg"></div>
-  <div class="page"><img src="./pages/page18.jpg"></div>
-  <div class="page"><img src="./pages/page19.jpg"></div>
-  <div class="page"><img src="./pages/page20.jpg"></div>
-  <div class="page"><img src="./pages/page22.jpg"></div>
-  <div class="page"><img src="./pages/page23.jpg"></div>
-  <div class="page"><img src="./pages/page24.jpg"></div>
-  <div class="page"><img src="./pages/page25.jpg"></div>
-  <div class="page"><img src="./pages/page26.jpg"></div>
+  <button id="prev" class="nav-btn">‹</button>
+  <button id="next" class="nav-btn">›</button>
 
+  <div id="flipbook">
+
+    <!-- Couverture avant -->
+    <div class="page"><img src="./pages/page1.jpg"></div>
+
+    <!-- Intérieur -->
+    <div class="page"><img src="./pages/page2.jpg"></div>
+    <div class="page"><img src="./pages/page3.jpg"></div>
+    <div class="page"><img src="./pages/page4.jpg"></div>
+    <div class="page"><img src="./pages/page5.jpg"></div>
+    <div class="page"><img src="./pages/page6.jpg"></div>
+    <div class="page"><img src="./pages/page7.jpg"></div>
+    <div class="page"><img src="./pages/page8.jpg"></div>
+    <div class="page"><img src="./pages/page9.jpg"></div>
+    <div class="page"><img src="./pages/page10.jpg"></div>
+    <div class="page"><img src="./pages/page11.jpg"></div>
+    <div class="page"><img src="./pages/page12.jpg"></div>
+    <div class="page"><img src="./pages/page13.jpg"></div>
+    <div class="page"><img src="./pages/page14.jpg"></div>
+    <div class="page"><img src="./pages/page15.jpg"></div>
+    <div class="page"><img src="./pages/page16.jpg"></div>
+    <div class="page"><img src="./pages/page17.jpg"></div>
+    <div class="page"><img src="./pages/page18.jpg"></div>
+    <div class="page"><img src="./pages/page19.jpg"></div>
+    <div class="page"><img src="./pages/page20.jpg"></div>
+    <div class="page"><img src="./pages/page21.jpg"></div>
+    <div class="page"><img src="./pages/page22.jpg"></div>
+    <div class="page"><img src="./pages/page23.jpg"></div>
+    <div class="page"><img src="./pages/page24.jpg"></div>
+    <div class="page"><img src="./pages/page25.jpg"></div>
+
+    <!-- Couverture arrière -->
+    <div class="page"><img src="./pages/page26.jpg"></div>
+
+  </div>
 </div>
 
 <script>
-$(function() {
+$(function(){
+
   $('#flipbook').turn({
     width: 1190,
     height: 842,
     autoCenter: true,
-    gradients: true,
-    acceleration: true
+    display: 'double',   // IMPORTANT
+    when: {
+      turning: function(event, page) {
+        // Couvertures seules
+        if (page === 1 || page === $('#flipbook').turn('pages')) {
+          $('#flipbook').turn('display', 'single');
+        } else {
+          $('#flipbook').turn('display', 'double');
+        }
+      }
+    }
   });
+
+  $('#prev').click(function(){
+    $('#flipbook').turn('previous');
+  });
+
+  $('#next').click(function(){
+    $('#flipbook').turn('next');
+  });
+
 });
 </script>
 
