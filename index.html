@@ -29,7 +29,7 @@ body {
   background: white;
   overflow: hidden;
   box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  transition: transform 1s;
+  transition: transform 0.8s;
   transform-origin: left;
 }
 
@@ -39,33 +39,41 @@ body {
   object-fit: contain;
 }
 
-#prev, #next {
+#prev-left, #next-left,
+#prev-right, #next-right {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255,255,255,0.9);
   border: none;
-  font-size: 40px;
+  font-size: 35px;
   cursor: pointer;
-  padding: 10px 18px;
+  padding: 8px 15px;
   z-index: 10;
 }
 
-#prev { left: -70px; }
-#next { right: -70px; }
-
+#prev-left { left: -90px; }
+#next-left { left: 520px; }
+#prev-right { right: 520px; }
+#next-right { right: -90px; }
 </style>
 </head>
 <body>
 
 <div id="book-wrapper">
-  <button id="prev">‹</button>
-  <button id="next">›</button>
+
+  <!-- Boutons gauche -->
+  <button id="prev-left">‹</button>
+  <button id="next-left">›</button>
+
+  <!-- Boutons droite -->
+  <button id="prev-right">‹</button>
+  <button id="next-right">›</button>
 
   <!-- Pages -->
   <div class="page" data-page="1" style="left:0"><img src="./pages/page1.jpg"></div>
 
-  <!-- Pages intérieures : 2 par 2 -->
+  <!-- Pages intérieures 2 par 2 -->
   <div class="page" data-page="2" style="left:0"><img src="./pages/page2.jpg"></div>
   <div class="page" data-page="3" style="left:595px"><img src="./pages/page3.jpg"></div>
 
@@ -75,7 +83,10 @@ body {
   <div class="page" data-page="6" style="left:0"><img src="./pages/page6.jpg"></div>
   <div class="page" data-page="7" style="left:595px"><img src="./pages/page7.jpg"></div>
 
-  <!-- ... Continue pour toutes les pages intérieures ... -->
+  <!-- ... Continue toutes les pages intérieures ... -->
+
+  <div class="page" data-page="24" style="left:0"><img src="./pages/page24.jpg"></div>
+  <div class="page" data-page="25" style="left:595px"><img src="./pages/page25.jpg"></div>
 
   <!-- Couverture arrière -->
   <div class="page" data-page="26" style="left:0"><img src="./pages/page26.jpg"></div>
@@ -84,13 +95,12 @@ body {
 
 <script>
 const pages = Array.from(document.querySelectorAll('.page'));
-let currentPair = 0;
+let currentPair = 0; // 0 = couverture avant, 1 = première paire intérieure
 
-// Fonction pour afficher la paire correcte
 function updatePages() {
-  pages.forEach((p, i) => {
+  pages.forEach((p) => {
     const pageNum = parseInt(p.dataset.page);
-    
+
     // Couverture avant
     if(pageNum === 1) {
       p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
@@ -103,26 +113,21 @@ function updatePages() {
     }
     // Pages intérieures
     else {
-      const pairIndex = Math.floor((pageNum-2)/2); // 2 par 2
-      if(pairIndex < currentPair) {
-        p.style.transform = 'rotateY(-180deg)';
-      } else {
-        p.style.transform = 'rotateY(0deg)';
-      }
+      const pairIndex = Math.floor((pageNum-2)/2); // chaque paire = 2 pages
+      if(pairIndex < currentPair) p.style.transform = 'rotateY(-180deg)';
+      else p.style.transform = 'rotateY(0deg)';
       p.style.zIndex = 100 - pageNum;
     }
   });
 }
 
-// Boutons
-document.getElementById('next').onclick = () => {
-  if(currentPair < 12) currentPair++;
-  updatePages();
-};
-document.getElementById('prev').onclick = () => {
-  if(currentPair > 0) currentPair--;
-  updatePages();
-};
+// Boutons gauche
+document.getElementById('next-left').onclick = () => { if(currentPair < 12) currentPair++; updatePages(); };
+document.getElementById('prev-left').onclick = () => { if(currentPair > 0) currentPair--; updatePages(); };
+
+// Boutons droite
+document.getElementById('next-right').onclick = () => { if(currentPair < 12) currentPair++; updatePages(); };
+document.getElementById('prev-right').onclick = () => { if(currentPair > 0) currentPair--; updatePages(); };
 
 // Initialisation
 updatePages();
