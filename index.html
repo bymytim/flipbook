@@ -1,73 +1,90 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mon Flipbook</title>
+<meta charset="UTF-8">
+<title>Mon Flipbook</title>
 
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Turn.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+<!-- Turn.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
 
-  <style>
-    body {
-      background: #222;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+<style>
+body {
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
 
-    #flipbook {
-      width: 800px;
-      height: 600px;
-    }
+/* Taille totale du livre (2 pages A4) */
+#flipbook {
+  width: 1190px;
+  height: 842px;
+}
 
-    #flipbook img {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+/* Une page A4 */
+#flipbook .page {
+  width: 595px;
+  height: 842px;
+}
+
+/* Image plein format */
+#flipbook .page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: white;
+}
+</style>
 </head>
 
 <body>
-  <div id="flipbook">
-    <img src="pages/page1.jpg">
-    <img src="pages/page2.jpg">
-    <img src="pages/page3.jpg">
-    <img src="pages/page4.jpg">
-    <img src="pages/page5.jpg"> 
-    <img src="pages/page6.jpg">
-    <img src="pages/page7.jpg">
-    <img src="pages/page8.jpg">
-    <img src="pages/page9.jpg">
-    <img src="pages/page10.jpg">    
-    <img src="pages/page11.jpg">
-    <img src="pages/page12.jpg">
-    <img src="pages/page13.jpg">
-    <img src="pages/page14.jpg">
-    <img src="pages/page15.jpg">
-    <img src="pages/page16.jpg">
-    <img src="pages/page17.jpg">
-    <img src="pages/page18.jpg">
-    <img src="pages/page19.jpg">
-    <img src="pages/page20.jpg">
-    <img src="pages/page21.jpg">
-    <img src="pages/page22.jpg">
-    <img src="pages/page23.jpg">
-    <img src="pages/page24.jpg">
-    <img src="pages/page25.jpg">
-    <img src="pages/page26.jpg">
-  </div>
 
-  <script>
-    $("#flipbook").turn({
-      width: 800,
-      height: 600,
-      autoCenter: true
-    });
-  </script>
+<div id="flipbook">
+
+  <div class="page"><img src="./pages/page1.jpg"></div>
+  <div class="page"><img src="./pages/page2.jpg"></div>
+  <div class="page"><img src="./pages/page3.jpg"></div>
+  <div class="page"><img src="./pages/page4.jpg"></div>
+  <div class="page"><img src="./pages/page5.jpg"></div>
+  <div class="page"><img src="./pages/page6.jpg"></div>
+  <div class="page"><img src="./pages/page7.jpg"></div>
+  <div class="page"><img src="./pages/page8.jpg"></div>
+  <div class="page"><img src="./pages/page9.jpg"></div>
+  <div class="page"><img src="./pages/page10.jpg"></div>
+  <div class="page"><img src="./pages/page11.jpg"></div>
+  <div class="page"><img src="./pages/page12.jpg"></div>
+  <div class="page"><img src="./pages/page13.jpg"></div>
+  <div class="page"><img src="./pages/page14.jpg"></div>
+  <div class="page"><img src="./pages/page15.jpg"></div>
+  <div class="page"><img src="./pages/page16.jpg"></div>
+  <div class="page"><img src="./pages/page17.jpg"></div>
+  <div class="page"><img src="./pages/page18.jpg"></div>
+  <div class="page"><img src="./pages/page19.jpg"></div>
+  <div class="page"><img src="./pages/page20.jpg"></div>
+  <div class="page"><img src="./pages/page22.jpg"></div>
+  <div class="page"><img src="./pages/page23.jpg"></div>
+  <div class="page"><img src="./pages/page24.jpg"></div>
+  <div class="page"><img src="./pages/page25.jpg"></div>
+  <div class="page"><img src="./pages/page26.jpg"></div>
+
+</div>
+
+<script>
+$(function() {
+  $('#flipbook').turn({
+    width: 1190,
+    height: 842,
+    autoCenter: true,
+    gradients: true,
+    acceleration: true
+  });
+});
+</script>
+
 </body>
 </html>
