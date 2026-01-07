@@ -19,6 +19,7 @@ body {
   width: 1190px; /* 2 pages A4 */
   height: 842px;
   perspective: 2000px;
+  overflow: hidden;
 }
 
 #book {
@@ -36,10 +37,10 @@ body {
   background: white;
   position: absolute;
   top: 0;
-  left: 0;
   overflow: hidden;
   backface-visibility: hidden;
   box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  transition: transform 0.8s;
 }
 
 .page img {
@@ -48,15 +49,25 @@ body {
   object-fit: contain;
 }
 
-/* Pages de droite */
-.page.right {
-  left: 595px;
-  transform-origin: left;
-}
-
-/* Pages de gauche */
+/* Page de gauche (intérieur) avec ombre */
 .page.left {
   transform-origin: right;
+  left: 0;
+  box-shadow: inset -20px 0 50px rgba(0,0,0,0.3);
+}
+
+/* Page de droite (intérieur) */
+.page.right {
+  transform-origin: left;
+  left: 595px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Couverture avant et arrière */
+.page.cover {
+  left: 0;
+  width: 595px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 /* Boutons */
@@ -84,9 +95,9 @@ button {
 
   <div id="book">
     <!-- Couverture avant -->
-    <div class="page left" data-page="1"><img src="./pages/page1.jpg"></div>
+    <div class="page cover" data-page="1"><img src="./pages/page1.jpg"></div>
 
-    <!-- Pages intérieures -->
+    <!-- Pages intérieures 2 par 2 -->
     <div class="page left" data-page="2"><img src="./pages/page2.jpg"></div>
     <div class="page right" data-page="3"><img src="./pages/page3.jpg"></div>
 
@@ -124,36 +135,41 @@ button {
     <div class="page right" data-page="25"><img src="./pages/page25.jpg"></div>
 
     <!-- Couverture arrière -->
-    <div class="page left" data-page="26"><img src="./pages/page26.jpg"></div>
+    <div class="page cover" data-page="26"><img src="./pages/page26.jpg"></div>
   </div>
 </div>
 
 <script>
-const book = document.getElementById('book');
 const pages = Array.from(document.querySelectorAll('.page'));
-let currentPair = 0; // 0 = couverture avant, 1 = première paire intérieure
+let currentPair = 0; // 0 = couverture avant
 
 function updateBook() {
   pages.forEach(p => {
-    const pageNum = parseInt(p.dataset.page);
-    if(pageNum === 1){ // Couverture avant
+    const num = parseInt(p.dataset.page);
+
+    // Couverture avant
+    if(num === 1){
       p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
       p.style.zIndex = 100;
-    } else if(pageNum === 26){ // Couverture arrière
+    }
+    // Couverture arrière
+    else if(num === 26){
       p.style.transform = currentPair >= 12 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
       p.style.zIndex = 100;
-    } else { // Pages intérieures
-      const pairIndex = Math.floor((pageNum-2)/2) +1;
+    }
+    // Pages intérieures 2 par 2
+    else{
+      const pairIndex = Math.floor((num-2)/2) + 1;
       if(pairIndex <= currentPair) p.style.transform = 'rotateY(-180deg)';
       else p.style.transform = 'rotateY(0deg)';
-      p.style.zIndex = 50 - pageNum;
+      p.style.zIndex = 50 - num;
     }
   });
 }
 
 // Boutons
-document.getElementById('next').onclick = () => { if(currentPair<13) currentPair++; updateBook(); };
-document.getElementById('prev').onclick = () => { if(currentPair>0) currentPair--; updateBook(); };
+document.getElementById('next').onclick = () => { if(currentPair < 12) currentPair++; updateBook(); };
+document.getElementById('prev').onclick = () => { if(currentPair > 0) currentPair--; updateBook(); };
 
 // Initialisation
 updateBook();
