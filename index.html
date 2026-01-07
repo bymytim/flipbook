@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Flipbook</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Turn.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+
+  <style>
+    body {
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #flipbook {
+      width: 800px;
+      height: 600px;
+    }
+
+    #flipbook img {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="flipbook">
+    <img src="pages/page1.jpg">
+    <img src="pages/page2.jpg">
+    <img src="pages/page3.jpg">
+    <img src="pages/page4.jpg">
+    <img src="pages/page5.jpg"> 
+    <img src="pages/page6.jpg">
+    <img src="pages/page7.jpg">
+    <img src="pages/page8.jpg">
+    <img src="pages/page9.jpg">
+    <img src="pages/page10.jpg">    
+    <img src="pages/page11.jpg">
+    <img src="pages/page12.jpg">
+    <img src="pages/page13.jpg">
+    <img src="pages/page14.jpg">
+    <img src="pages/page15.jpg">
+    <img src="pages/page16.jpg">
+    <img src="pages/page17.jpg">
+    <img src="pages/page18.jpg">
+    <img src="pages/page19.jpg">
+    <img src="pages/page20.jpg">
+    <img src="pages/page21.jpg">
+    <img src="pages/page22.jpg">
+    <img src="pages/page23.jpg">
+    <img src="pages/page24.jpg">
+    <img src="pages/page25.jpg">
+    <img src="pages/page26.jpg">
+  </div>
+
+  <script>
+    $("#flipbook").turn({
+      width: 800,
+      height: 600,
+      autoCenter: true
+    });
+  </script>
+</body>
+</html>
