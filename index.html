@@ -48,6 +48,15 @@ body {
   object-fit: contain;
 }
 
+/* Couvertures avant/arrière */
+.page.cover {
+  left: 0;
+  width: 595px; /* largeur d’une page */
+  z-index: 200; /* toujours au-dessus au départ */
+  transform-origin: left;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
 /* Pages de droite */
 .page.right {
   left: 595px;
@@ -84,7 +93,7 @@ button {
 
   <div id="book">
     <!-- Couverture avant -->
-    <div class="page right" data-page="1"><img src="./pages/page1.jpg"></div>
+    <div class="page cover" data-page="1"><img src="./pages/page1.jpg"></div>
 
     <!-- Pages intérieures -->
     <div class="page left" data-page="2"><img src="./pages/page2.jpg"></div>
@@ -138,10 +147,10 @@ function updateBook() {
     const pageNum = parseInt(p.dataset.page);
     if(pageNum === 1){ // Couverture avant
       p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      p.style.zIndex = 100;
+      p.style.zIndex = 200;
     } else if(pageNum === 26){ // Couverture arrière
       p.style.transform = currentPair >= 12 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
-      p.style.zIndex = 100;
+      p.style.zIndex = 200;
     } else { // Pages intérieures
       const pairIndex = Math.floor((pageNum-2)/2) +1;
       if(pairIndex <= currentPair) p.style.transform = 'rotateY(-180deg)';
