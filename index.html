@@ -3,126 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <title>Flipbook A4</title>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Turn.js (HTML4 fallback) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.html4.min.js"></script>
-
 <style>
 body {
-  background:#222;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
+  margin: 0;
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: sans-serif;
 }
 
 #book-wrapper {
   position: relative;
-}
-
-#flipbook {
-  width: 1190px;
+  width: 1190px; /* 2 pages A4 */
   height: 842px;
+  perspective: 2000px;
+  overflow: hidden;
 }
 
-#flipbook .page {
+.page {
+  position: absolute;
   width: 595px;
   height: 842px;
   background: white;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  transition: transform 1s;
+  transform-origin: left;
 }
 
-#flipbook .page img {
+.page img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* Boutons */
-.nav-btn {
+#prev, #next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: white;
+  background: rgba(255,255,255,0.9);
   border: none;
   font-size: 40px;
   cursor: pointer;
   padding: 10px 18px;
-  z-index: 999; /* CRITIQUE */
+  z-index: 10;
 }
 
-#prev { left: -80px; }
-#next { right: -80px; }
+#prev { left: -70px; }
+#next { right: -70px; }
+
 </style>
 </head>
-
 <body>
 
 <div id="book-wrapper">
+  <button id="prev">‹</button>
+  <button id="next">›</button>
 
-  <button id="prev" class="nav-btn">‹</button>
-  <button id="next" class="nav-btn">›</button>
+  <!-- Pages -->
+  <div class="page" data-page="1" style="left:0"><img src="./pages/page1.jpg"></div>
 
-  <div id="flipbook">
+  <!-- Pages intérieures : 2 par 2 -->
+  <div class="page" data-page="2" style="left:0"><img src="./pages/page2.jpg"></div>
+  <div class="page" data-page="3" style="left:595px"><img src="./pages/page3.jpg"></div>
 
-    <div class="page"><img src="./pages/page1.jpg"></div>
-    <div class="page"><img src="./pages/page2.jpg"></div>
-    <div class="page"><img src="./pages/page3.jpg"></div>
-    <div class="page"><img src="./pages/page4.jpg"></div>
-    <div class="page"><img src="./pages/page5.jpg"></div>
-    <div class="page"><img src="./pages/page6.jpg"></div>
-    <div class="page"><img src="./pages/page7.jpg"></div>
-    <div class="page"><img src="./pages/page8.jpg"></div>
-    <div class="page"><img src="./pages/page9.jpg"></div>
-    <div class="page"><img src="./pages/page10.jpg"></div>
-    <div class="page"><img src="./pages/page11.jpg"></div>
-    <div class="page"><img src="./pages/page12.jpg"></div>
-    <div class="page"><img src="./pages/page13.jpg"></div>
-    <div class="page"><img src="./pages/page14.jpg"></div>
-    <div class="page"><img src="./pages/page15.jpg"></div>
-    <div class="page"><img src="./pages/page16.jpg"></div>
-    <div class="page"><img src="./pages/page17.jpg"></div>
-    <div class="page"><img src="./pages/page18.jpg"></div>
-    <div class="page"><img src="./pages/page19.jpg"></div>
-    <div class="page"><img src="./pages/page20.jpg"></div>
-    <div class="page"><img src="./pages/page21.jpg"></div>
-    <div class="page"><img src="./pages/page22.jpg"></div>
-    <div class="page"><img src="./pages/page23.jpg"></div>
-    <div class="page"><img src="./pages/page24.jpg"></div>
-    <div class="page"><img src="./pages/page25.jpg"></div>
-    <div class="page"><img src="./pages/page26.jpg"></div>
+  <div class="page" data-page="4" style="left:0"><img src="./pages/page4.jpg"></div>
+  <div class="page" data-page="5" style="left:595px"><img src="./pages/page5.jpg"></div>
 
-  </div>
+  <div class="page" data-page="6" style="left:0"><img src="./pages/page6.jpg"></div>
+  <div class="page" data-page="7" style="left:595px"><img src="./pages/page7.jpg"></div>
+
+  <!-- ... Continue pour toutes les pages intérieures ... -->
+
+  <!-- Couverture arrière -->
+  <div class="page" data-page="26" style="left:0"><img src="./pages/page26.jpg"></div>
+
 </div>
 
 <script>
-$(document).ready(function(){
+const pages = Array.from(document.querySelectorAll('.page'));
+let currentPair = 0;
 
-  if (!$.isFunction($.fn.turn)) {
-    alert("Turn.js n’est pas chargé !");
-    return;
-  }
-
-  $('#flipbook').turn({
-    width: 1190,
-    height: 842,
-    autoCenter: true,
-    display: 'double'
+// Fonction pour afficher la paire correcte
+function updatePages() {
+  pages.forEach((p, i) => {
+    const pageNum = parseInt(p.dataset.page);
+    
+    // Couverture avant
+    if(pageNum === 1) {
+      p.style.transform = currentPair === 0 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
+      p.style.zIndex = 100;
+    }
+    // Couverture arrière
+    else if(pageNum === 26) {
+      p.style.transform = currentPair >= 12 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
+      p.style.zIndex = 100;
+    }
+    // Pages intérieures
+    else {
+      const pairIndex = Math.floor((pageNum-2)/2); // 2 par 2
+      if(pairIndex < currentPair) {
+        p.style.transform = 'rotateY(-180deg)';
+      } else {
+        p.style.transform = 'rotateY(0deg)';
+      }
+      p.style.zIndex = 100 - pageNum;
+    }
   });
+}
 
-  $('#prev').on('click', function(){
-    $('#flipbook').turn('previous');
-  });
+// Boutons
+document.getElementById('next').onclick = () => {
+  if(currentPair < 12) currentPair++;
+  updatePages();
+};
+document.getElementById('prev').onclick = () => {
+  if(currentPair > 0) currentPair--;
+  updatePages();
+};
 
-  $('#next').on('click', function(){
-    $('#flipbook').turn('next');
-  });
-
-});
+// Initialisation
+updatePages();
 </script>
 
 </body>
