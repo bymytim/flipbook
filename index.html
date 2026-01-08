@@ -101,61 +101,63 @@ button {
 @media (max-width: 900px) {
 
   body {
-    padding: 30px 10px;
+    padding: 20px 10px;
   }
 
   h1 {
     font-size: 32px;
-    margin-bottom: 20px;
     text-align: center;
   }
 
   #book-wrapper {
     width: 100%;
-    height: auto;
     max-width: 100vw;
+    overflow: hidden; /* CRUCIAL */
   }
 
   .page-container {
     width: 100%;
+    display: flex;
     justify-content: center;
   }
 
+  /* On neutralise le spread en mobile */
   .spread {
     width: 100%;
+    display: flex;
     justify-content: center;
   }
 
+  /* UNE SEULE PAGE VISIBLE */
   .page {
     width: 90vw;
-    height: calc(90vw * 1.414); /* ratio A4 */
+    height: calc(90vw * 1.414);
     max-height: 85vh;
+    margin: 0 auto;
   }
 
-  /* masquer la page gauche en mobile */
   .page.left {
     display: none !important;
   }
 
   button {
-    font-size: 30px;
+    font-size: 28px;
     padding: 8px 14px;
-    top: auto;
     bottom: -60px;
+    top: auto;
     transform: none;
   }
 
   #prev {
-    left: 20px;
+left: 10px;
   }
 
   #next {
-    right: 20px;
+    right: 10px;
   }
 
   .download-links {
     flex-direction: column;
-    gap: 10px;
     width: 100%;
     align-items: center;
   }
