@@ -1,3 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Bioplastics</title>
+  <!-- typo -->
+<link rel="stylesheet" href="https://use.typekit.net/wkd6ztd.css">
+  
+<style>
+body {
+  margin: 0;
+  background: #222;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 20px;
+  color: #fff;
+}
+
+h1 {
+  font-family: "vollkorn", serif;
+  font-size: 48px;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+#book-wrapper {
+  position: relative;
+  width: 1190px;
+  height: 842px;
+  overflow: visible;
+  margin-bottom: 30px;
+}
+
+.page-container {
+  display: flex;
+  transition: transform 0.5s;
+  width: 100%;
+}
+
+.page {
+  width: 595px;
+  height: 842px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.page.left {
+  box-shadow: inset -20px 0 50px rgba(0,0,0,0.3);
+}
+
+.page img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.9);
+  border: none;
+  font-size: 40px;
+  cursor: pointer;
+  padding: 10px 20px;
+  z-index: 1000;
+}
+
+#prev { left: -80px; }
+#next { right: -80px; }
+
+/* Liens de téléchargement */
+.download-links {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.download-links a {
+  background: #fff;
+  color: #222;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.download-links a:hover {
+  background: #ccc;
+}
+</style>
+
 /* ========================= */
 /* RESPONSIVE – MOBILE */
 /* ========================= */
@@ -70,3 +167,89 @@
   }
 }
 
+</head>
+<body>
+
+<h1>Bioplastics</h1>
+
+<div id="book-wrapper">
+  <button id="prev">‹</button>
+  <button id="next">›</button>
+
+  <div class="page-container" id="book">
+    <!-- Les pages seront générées automatiquement par JS -->
+  </div>
+</div>
+
+<!-- Liens PDF -->
+<div class="download-links">
+  <a href="./pdf/book-vf.pdf" download>Télécharger VF</a>
+  <a href="./pdf/book-en.pdf" download>Download English</a>
+</div>
+
+<script>
+// Configuration
+const totalPages = 26;
+const book = document.getElementById('book');
+let currentSpread = 0;
+
+// Générer automatiquement les pages et spreads
+function generatePages() {
+  const coverStart = document.createElement('div');
+  coverStart.className = 'page';
+  coverStart.innerHTML = `<img src="./pages/page1.jpg">`;
+  book.appendChild(coverStart);
+
+  for(let i=2; i<=25; i+=2){
+    const left = document.createElement('div');
+    left.className = 'page left';
+    left.innerHTML = `<img src="./pages/page${i}.jpg">`;
+
+    const right = document.createElement('div');
+    right.className = 'page';
+    right.innerHTML = `<img src="./pages/page${i+1}.jpg">`;
+
+    const spread = document.createElement('div');
+    spread.className = 'spread';
+    spread.style.display = 'flex';
+    spread.appendChild(left);
+    spread.appendChild(right);
+
+    book.appendChild(spread);
+  }
+
+  const coverEnd = document.createElement('div');
+  coverEnd.className = 'page';
+  coverEnd.innerHTML = `<img src="./pages/page26.jpg">`;
+  book.appendChild(coverEnd);
+}
+
+// Mettre à jour la vue
+function updateBook() {
+  const children = Array.from(book.children);
+  children.forEach((child, index) => {
+    if(index === currentSpread) {
+      child.style.display = 'flex';
+    } else {
+      child.style.display = 'none';
+    }
+  });
+}
+
+// Initialisation
+generatePages();
+updateBook();
+
+// Boutons
+document.getElementById('next').onclick = () => {
+  if(currentSpread < book.children.length - 1) currentSpread++;
+  updateBook();
+};
+document.getElementById('prev').onclick = () => {
+  if(currentSpread > 0) currentSpread--;
+  updateBook();
+};
+</script>
+
+</body>
+</html>
