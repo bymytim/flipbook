@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bioplastics</title>
   <!-- typo -->
 <link rel="stylesheet" href="https://use.typekit.net/wkd6ztd.css">
@@ -93,6 +94,60 @@ button {
 .download-links a:hover {
   background: #ccc;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
+  #book-wrapper {
+    width: 100%;
+    height: auto;
+    max-width: 595px; /* Single page width */
+  }
+
+  .page-container {
+    flex-direction: column;
+  }
+
+  .page {
+    width: 100%;
+    height: auto;
+    min-height: 70vh; /* Adjust as needed */
+  }
+
+  .spread {
+    flex-direction: column;
+  }
+
+  button {
+    position: fixed;
+    bottom: 20px;
+    top: auto;
+    transform: none;
+    font-size: 30px;
+    padding: 15px;
+  }
+
+  #prev {
+    left: 20px;
+  }
+
+  #next {
+    right: 20px;
+  }
+
+  .download-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
 </style>
 </head>
 <body>
@@ -120,35 +175,49 @@ const totalPages = 26;
 const book = document.getElementById('book');
 let currentSpread = 0;
 
+// Check if mobile
+const isMobile = window.innerWidth < 768;
+
 // Générer automatiquement les pages et spreads
 function generatePages() {
-  const coverStart = document.createElement('div');
-  coverStart.className = 'page';
-  coverStart.innerHTML = `<img src="./pages/page1.jpg">`;
-  book.appendChild(coverStart);
+  if (isMobile) {
+    // Single pages for mobile
+    for (let i = 1; i <= totalPages; i++) {
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'page';
+      pageDiv.innerHTML = `<img src="./pages/page${i}.jpg">`;
+      book.appendChild(pageDiv);
+    }
+  } else {
+    // Original spread logic for desktop
+    const coverStart = document.createElement('div');
+    coverStart.className = 'page';
+    coverStart.innerHTML = `<img src="./pages/page1.jpg">`;
+    book.appendChild(coverStart);
 
-  for(let i=2; i<=25; i+=2){
-    const left = document.createElement('div');
-    left.className = 'page left';
-    left.innerHTML = `<img src="./pages/page${i}.jpg">`;
+    for(let i=2; i<=25; i+=2){
+      const left = document.createElement('div');
+      left.className = 'page left';
+      left.innerHTML = `<img src="./pages/page${i}.jpg">`;
 
-    const right = document.createElement('div');
-    right.className = 'page';
-    right.innerHTML = `<img src="./pages/page${i+1}.jpg">`;
+      const right = document.createElement('div');
+      right.className = 'page';
+      right.innerHTML = `<img src="./pages/page${i+1}.jpg">`;
 
-    const spread = document.createElement('div');
-    spread.className = 'spread';
-    spread.style.display = 'flex';
-    spread.appendChild(left);
-    spread.appendChild(right);
+      const spread = document.createElement('div');
+      spread.className = 'spread';
+      spread.style.display = 'flex';
+      spread.appendChild(left);
+      spread.appendChild(right);
 
-    book.appendChild(spread);
+      book.appendChild(spread);
+    }
+
+    const coverEnd = document.createElement('div');
+    coverEnd.className = 'page';
+    coverEnd.innerHTML = `<img src="./pages/page26.jpg">`;
+    book.appendChild(coverEnd);
   }
-
-  const coverEnd = document.createElement('div');
-  coverEnd.className = 'page';
-  coverEnd.innerHTML = `<img src="./pages/page26.jpg">`;
-  book.appendChild(coverEnd);
 }
 
 // Mettre à jour la vue
@@ -156,7 +225,7 @@ function updateBook() {
   const children = Array.from(book.children);
   children.forEach((child, index) => {
     if(index === currentSpread) {
-      child.style.display = 'flex';
+      child.style.display = isMobile ? 'block' : 'flex';
     } else {
       child.style.display = 'none';
     }
