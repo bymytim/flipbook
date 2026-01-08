@@ -17,11 +17,6 @@ body {
   align-items: center;
   padding: 50px 20px;
   color: #fff;
-  
-  display: flex;            /* rend le lien un conteneur flex */
-  justify-content: center;  /* centre horizontalement le texte */
-  align-items: center;      /* centre verticalement le texte */
-  text-align: center;       /* sécurité pour centrer le texte */
 }
 
 h1 {
@@ -45,26 +40,12 @@ h1 {
   transition: transform 0.5s;
   width: 100%;
 }
-.spread {
-  position: relative;
-}
-
-.spread::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 10px; /* largeur du pli */
-  height: 100%;
-  background: rgba(0,0,0,0.3);
-  transform: translateX(-50%);
-  pointer-events: none;
-}
 
 .page {
   width: 595px;
   height: 842px;
   background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
   overflow: hidden;
 }
 
@@ -108,6 +89,14 @@ button {
   font-weight: bold;
   border-radius: 5px;
   transition: background 0.3s;
+
+  .download-links a {
+  display: flex;            /* rend le lien un conteneur flex */
+  justify-content: center;  /* centre horizontalement */
+  align-items: center;      /* centre verticalement */
+  text-align: center;       /* sécurité */
+}
+
 }
 
 .download-links a:hover {
