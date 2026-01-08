@@ -100,71 +100,63 @@ button {
 
 @media (max-width: 900px) {
 
-  body {
-    padding: 20px 10px;
-  }
-
-  h1 {
-    font-size: 32px;
-    text-align: center;
+  html, body {
+    overflow-x: hidden;
   }
 
   #book-wrapper {
-    width: 100%;
-    max-width: 100vw;
-    overflow: hidden; /* CRUCIAL */
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 auto;
+    position: relative;
   }
 
   .page-container {
-    width: 100%;
+    width: 100% !important;
     display: flex;
     justify-content: center;
   }
 
-  /* On neutralise le spread en mobile */
+  /* Tous les enfants du book */
+  #book > * {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+  }
+
   .spread {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  /* UNE SEULE PAGE VISIBLE */
-  .page {
-    width: 90vw;
-    height: calc(90vw * 1.414);
-    max-height: 85vh;
+    width: 100% !important;
     margin: 0 auto;
   }
 
+  .page {
+    width: 90vw !important;
+    height: calc(90vw * 1.414) !important;
+    margin: 0 auto;
+  }
+
+  /* on enlève la page gauche */
   .page.left {
     display: none !important;
   }
 
+  /* boutons */
   button {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    transform: none;
     font-size: 28px;
     padding: 8px 14px;
-    bottom: -60px;
-    top: auto;
-    transform: none;
+    z-index: 2000;
   }
 
   #prev {
-left: 10px;
+    left: 20px;
   }
 
   #next {
-    right: 10px;
-  }
-
-  .download-links {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-
-  .download-links a {
-    width: 90%;
-    text-align: center;
+    right: 20px;
   }
 }
 
