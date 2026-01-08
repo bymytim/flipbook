@@ -93,49 +93,6 @@ button {
 .download-links a:hover {
   background: #ccc;
 }
-
-/* ========================= */
-/* RESPONSIVE – MOBILE */
-/* ========================= */
-
-@media (max-width: 900px) {
-  #book-wrapper {
-    width: 100% !important;
-    overflow: hidden;
-    margin: 0 auto;
-  }
-
-  .page-container, .spread {
-    flex-direction: column !important; /* une page par ligne */
-    width: 100% !important;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .page.left {
-    display: none !important;
-  }
-
-  .page {
-    width: 90vw !important;
-    height: calc(90vw * 1.414) !important;
-    max-height: 85vh;
-    margin: 0 auto;
-  }
-
-  button {
-    position: fixed;
-    top: auto;
-    bottom: 20px;
-    font-size: 28px;
-    padding: 8px 14px;
-    z-index: 2000;
-  }
-
-  #prev { left: 20px; }
-  #next { right: 20px; }
-}
-
 </style>
 </head>
 <body>
@@ -208,34 +165,6 @@ function updateBook() {
 
 // Initialisation
 generatePages();
-// Detect mobile
-const isMobile = window.innerWidth <= 900;
-
-// Modifier updateBook pour mobile
-function updateBook() {
-  const children = Array.from(book.children);
-  children.forEach((child, index) => {
-    if(index === currentSpread) {
-      if(isMobile) {
-        // afficher une seule page à la fois sur mobile
-        // si c'est un spread, on affiche juste la droite
-        if(child.classList.contains('spread')) {
-          const pages = Array.from(child.children);
-          pages.forEach((p,i)=>p.style.display = (i===1 ? 'flex' : 'none'));
-          child.style.display = 'flex';
-        } else {
-          child.style.display = 'flex';
-        }
-      } else {
-        // desktop normal
-        child.style.display = 'flex';
-      }
-    } else {
-      child.style.display = 'none';
-    }
-  });
-}
-// Fin fix mobile 
 updateBook();
 
 // Boutons
