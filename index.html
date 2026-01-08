@@ -50,7 +50,10 @@ h1 {
   width: 595px;
   height: 842px;
   background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    /* box-shadow externe + shadow interne côté gauche */
+  box-shadow: inset 20px 0 50px rgba(0,0,0,0.2), /* shadow interne gauche */
+              0 0 10px rgba(0,0,0,0.3);          /* shadow externe */
+
   overflow: hidden;
 }
 
