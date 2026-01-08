@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bioplastics</title>
   <!-- typo -->
 <link rel="stylesheet" href="https://use.typekit.net/wkd6ztd.css">
@@ -52,10 +53,6 @@ h1 {
   box-shadow: inset -20px 0 50px rgba(0,0,0,0.3);
 }
 
-.page.right {
-  box-shadow: inset 20px 0 50px rgba(0,0,0,0.3);
-}
-
 .page img {
   width: 100%;
   height: 100%;
@@ -97,6 +94,65 @@ button {
 .download-links a:hover {
   background: #ccc;
 }
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 10px;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
+  #book-wrapper {
+    width: 100vw;
+    height: auto;
+  }
+
+  .page {
+    width: 50vw;
+    height: auto;
+    min-height: 70vh;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .page.cover {
+    width: 100vw;
+  }
+
+  .page.left {
+    box-shadow: none;
+  }
+
+  .spread {
+    width: 100vw;
+  }
+
+  button {
+    position: fixed;
+    bottom: 20px;
+    top: auto;
+    transform: none;
+    font-size: 30px;
+    padding: 15px;
+  }
+
+  #prev {
+    left: 20px;
+  }
+
+  #next {
+    right: 20px;
+  }
+
+  .download-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
 </style>
 </head>
 <body>
@@ -127,7 +183,7 @@ let currentSpread = 0;
 // Générer automatiquement les pages et spreads
 function generatePages() {
   const coverStart = document.createElement('div');
-  coverStart.className = 'page';
+  coverStart.className = 'page cover';
   coverStart.innerHTML = `<img src="./pages/page1.jpg">`;
   book.appendChild(coverStart);
 
@@ -137,7 +193,7 @@ function generatePages() {
     left.innerHTML = `<img src="./pages/page${i}.jpg">`;
 
     const right = document.createElement('div');
-    right.className = 'page right';
+    right.className = 'page';
     right.innerHTML = `<img src="./pages/page${i+1}.jpg">`;
 
     const spread = document.createElement('div');
@@ -150,7 +206,7 @@ function generatePages() {
   }
 
   const coverEnd = document.createElement('div');
-  coverEnd.className = 'page';
+  coverEnd.className = 'page cover';
   coverEnd.innerHTML = `<img src="./pages/page26.jpg">`;
   book.appendChild(coverEnd);
 }
